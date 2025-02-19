@@ -69,12 +69,12 @@ class CLCRec(torch.nn.Module):
             feature = torch.cat((feature, self.a_feat), dim=1)
         
         if self.t_feat is not None:
-            if self.is_word:
-                t_feat = F.normalize(torch.tensor(scatter_('mean', self.t_feat[self.word_tensor[1]], self.word_tensor[0]))).cuda()
-                feature = torch.cat((feature, t_feat), dim=1)
-            else:
-                feature = torch.cat((feature, self.t_feat), dim=1)
-
+            # if self.is_word:
+            #     t_feat = F.normalize(torch.tensor(scatter_('mean', self.t_feat[self.word_tensor[1]], self.word_tensor[0]))).cuda()
+            #     feature = torch.cat((feature, t_feat), dim=1)
+            # else:
+            #     feature = torch.cat((feature, self.t_feat), dim=1)
+            feature = torch.cat((feature, self.t_feat), dim=1)
 
         feature = F.leaky_relu(self.encoder_layer1(feature))
         feature = self.encoder_layer2(feature)
