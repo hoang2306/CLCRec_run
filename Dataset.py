@@ -8,14 +8,14 @@ import torch.nn as nn
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
-def data_load(dataset, has_v=True, has_a=True, has_t=True):
+def data_load(exp_mode, dataset, has_v=True, has_a=True, has_t=True):
     dir_str = './Data/' + dataset
     train_data = np.load(dir_str+'/train.npy', allow_pickle=True)
-    val_data = np.load(dir_str+'/val_full.npy', allow_pickle=True)
-    val_warm_data = np.load(dir_str+'/val_warm.npy', allow_pickle=True)
+    # val_data = np.load(dir_str+'/val_full.npy', allow_pickle=True)
+    # val_warm_data = np.load(dir_str+'/val_warm.npy', allow_pickle=True)
     val_cold_data = np.load(dir_str+'/val_cold.npy', allow_pickle=True)
-    test_data = np.load(dir_str+'/test_full.npy', allow_pickle=True)
-    test_warm_data = np.load(dir_str+'/test_warm.npy', allow_pickle=True)
+    # test_data = np.load(dir_str+'/test_full.npy', allow_pickle=True)
+    # test_warm_data = np.load(dir_str+'/test_warm.npy', allow_pickle=True)
     test_cold_data = np.load(dir_str+'/test_cold.npy', allow_pickle=True)
     
     if dataset == 'movielens':
@@ -60,10 +60,56 @@ def data_load(dataset, has_v=True, has_a=True, has_t=True):
         v_feat = np.load(dir_str+'/feat_v.npy')
         v_feat = torch.tensor(v_feat, dtype=torch.float).cuda()
         a_feat = t_feat = None
+    else:
+        if dataset == 'baby':
+            num_user = 19445
+            num_item = 7050
+            num_warm_item = 5640
+        # add more 
 
+        # multimedia load 
+        # if self.env.args.exp_mode=='ff':
+        #         image_file = os.path.join(self.env.DATA_PATH, 'image_feat.npy')
+        #         text_file = os.path.join(self.env.DATA_PATH, 'text_feat.npy')
+        #         audio_file = os.path.join(self.env.DATA_PATH, 'audio_feat.npy')
+        #     elif self.env.args.exp_mode=='fm':
+        #         image_file = os.path.join(self.env.DATA_PATH, 'image_feat_missing_test.npy')
+        #         text_file = os.path.join(self.env.DATA_PATH, 'text_feat_missing_test.npy')
+        #         audio_file = os.path.join(self.env.DATA_PATH, 'audio_feat_missing_test.npy')
+        #     elif self.env.args.exp_mode=='mf':
+        #         image_file = os.path.join(self.env.DATA_PATH, 'image_feat_missing_train.npy')
+        #         text_file = os.path.join(self.env.DATA_PATH, 'text_feat_missing_train.npy')
+        #         audio_file = os.path.join(self.env.DATA_PATH, 'audio_feat_missing_train.npy')
+        #     elif self.env.args.exp_mode=='mm':
+        #         image_file = os.path.join(self.env.DATA_PATH, 'image_feat_missing_all.npy')
+        #         text_file = os.path.join(self.env.DATA_PATH, 'text_feat_missing_all.npy')
+        #         audio_file = os.path.join(self.env.DATA_PATH, 'audio_feat_missing_all.npy')
 
-    return num_user, num_item, num_warm_item, train_data, val_data, val_warm_data, val_cold_data, test_data, test_warm_data, test_cold_data, v_feat, a_feat, t_feat
+        if exp_mode == 'ff':
+            v_feat = os.path.join(dir_str, 'image_feat.npy')
+            t_feat = os.path.join(dir_str, 'text_feat.npy')
+            a_feat = os.path.join(dir_str, 'audio_feat.npy')
+        elif exp_mode == 'fm':
+            v_feat = os.path.join(dir_str, 'image_feat_missing_test.npy')
+            t_feat = os.path.join(dir_str, 'text_feat_missing_test.npy')
+            a_feat = os.path.join(dir_str, 'audio_feat_missing_test.npy')
+        elif exp_mode == 'mf':
+            v_feat = os.path.join(dir_str, 'image_feat_missing_train.npy')
+            t_feat = os.path.join(dir_str, 'text_feat_missing_train.npy')
+            a_feat = os.path.join(dir_str, 'audio_feat_missing_train.npy')
+        elif exp_mode == 'mm':
+            v_feat = os.path.join(dir_str, 'image_feat_missing_all.npy')
+            t_feat = os.path.join(dir_str, 'text_feat_missing_all.npy')
+            a_feat = os.path.join(dir_str, 'audio_feat_missing_all.npy')
 
+        v_feat = np.load(v_feat)
+        v_feat = torch.tensor(v_feat, dtype=torch.float).cuda()
+        t_feat = np.load(t_feat)
+        t_feat = torch.tensor(t_feat, dtype=torch.float).cuda()
+        # not exist audio feature 
+        a_feat = None 
+
+    return num_user, num_item, num_warm_item, train_data, val_cold_data, test_cold_data, v_feat, a_feat, t_feat
 
 class TrainingDataset(Dataset):
     def __init__(self, num_user, num_item, user_item_dict, dataset, train_data, num_neg):
@@ -72,8 +118,8 @@ class TrainingDataset(Dataset):
         self.num_item = num_item
         self.num_neg = num_neg
         self.user_item_dict = user_item_dict
-        self.cold_set = set(np.load('./Data/'+dataset+'/cold_set.npy'))
-        self.all_set = set(range(num_user, num_user+num_item))-self.cold_set
+        # self.cold_set = set(np.load('./Data/'+dataset+'/cold_set.npy'))
+        # self.all_set = set(range(num_user, num_user+num_item))-self.cold_set
 
     def __len__(self):
         return len(self.train_data)
