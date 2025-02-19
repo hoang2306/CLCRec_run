@@ -118,8 +118,8 @@ class TrainingDataset(Dataset):
         self.num_item = num_item
         self.num_neg = num_neg
         self.user_item_dict = user_item_dict
-        # self.cold_set = set(np.load('./Data/'+dataset+'/cold_set.npy'))
-        # self.all_set = set(range(num_user, num_user+num_item))-self.cold_set
+        self.cold_set = set(np.load('./Data/'+dataset+'/cold_set.npy'))
+        self.all_set = set(range(num_user, num_user+num_item))-self.cold_set
 
     def __len__(self):
         return len(self.train_data)
