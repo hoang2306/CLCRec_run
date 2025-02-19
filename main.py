@@ -89,7 +89,7 @@ if __name__ == '__main__':
     ##########################################################################################################################################
     print('Data loading ...')
 
-    num_user, num_item, num_warm_item, train_data, val_data, val_warm_data, val_cold_data, test_data, test_warm_data, test_cold_data, v_feat, a_feat, t_feat = data_load(args.exp_mode, data_path)
+    num_user, num_item, num_warm_item, train_data, val_cold_data, test_cold_data, v_feat, a_feat, t_feat = data_load(args.exp_mode, data_path)
     
     dir_str = './Data/' + data_path
     user_item_all_dict = np.load(dir_str+'/user_item_all_dict.npy', allow_pickle=True).item()
