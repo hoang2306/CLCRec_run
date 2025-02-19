@@ -92,7 +92,10 @@ if __name__ == '__main__':
     num_user, num_item, num_warm_item, train_data, val_cold_data, test_cold_data, v_feat, a_feat, t_feat = data_load(args.exp_mode, data_path)
     
     dir_str = './Data/' + data_path
-    user_item_all_dict = np.load(dir_str+'/user_item_all_dict.npy', allow_pickle=True).item()
+    if args.data_path == 'movielens':
+        user_item_all_dict = np.load(dir_str+'/user_item_dict.npy', allow_pickle=True).item()
+    else:
+        user_item_all_dict = np.load(dir_str+'/user_item_all_dict.npy', allow_pickle=True).item()
     user_item_train_dict = np.load(dir_str+'/user_item_train_dict.npy', allow_pickle=True).item()
 
     # warm_item = torch.tensor(np.load(dir_str + '/warm_set.npy'))
