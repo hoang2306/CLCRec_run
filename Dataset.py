@@ -18,13 +18,15 @@ def data_load(args, exp_mode, dataset, has_v=True, has_a=True, has_t=True):
 
     train_data = np.array(train_data, dtype=np.int32)
 
+    # val_cold_data = np.array(val_cold_data, dtype=np.int32)
+    # test_cold_data = np.array(test_cold_data, dtype=np.int32)
+
     if args.data_path == 'movielens':
         test_data = np.load(dir_str+'/test_full.npy', allow_pickle=True)
         test_warm_data = np.load(dir_str+'/test_warm.npy', allow_pickle=True)
         val_data = np.load(dir_str+'/val_full.npy', allow_pickle=True)
         val_warm_data = np.load(dir_str+'/val_warm.npy', allow_pickle=True)
-        val_cold_data = np.array(val_cold_data, dtype=np.int32)
-        test_cold_data = np.array(test_cold_data, dtype=np.int32)
+        
     
     if dataset == 'movielens':
         num_user = 55485
