@@ -22,9 +22,11 @@ def data_load(exp_mode, dataset, has_v=True, has_a=True, has_t=True):
         num_user = 55485
         num_item = 5986
         num_warm_item = 5119
-        v_feat = torch.tensor(np.load(dir_str+'/feat_v.npy', allow_pickle=True), dtype=torch.float).cuda()
-        a_feat = torch.tensor(np.load(dir_str+'/feat_a.npy', allow_pickle=True), dtype=torch.float).cuda()
-        t_feat = torch.tensor(np.load(dir_str+'/feat_t.npy', allow_pickle=True), dtype=torch.float).cuda()
+        # v_feat = torch.tensor(np.load(dir_str+'/feat_v.npy', allow_pickle=True), dtype=torch.float).cuda()
+        # a_feat = torch.tensor(np.load(dir_str+'/feat_a.npy', allow_pickle=True), dtype=torch.float).cuda()
+        # t_feat = torch.tensor(np.load(dir_str+'/feat_t.npy', allow_pickle=True), dtype=torch.float).cuda()
+
+        v_feat = a_feat = t_feat = None 
 
 
     elif dataset == 'amazon':
