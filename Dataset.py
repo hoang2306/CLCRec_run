@@ -8,19 +8,23 @@ import torch.nn as nn
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
-def data_load(exp_mode, dataset, has_v=True, has_a=True, has_t=True):
+def data_load(args, exp_mode, dataset, has_v=True, has_a=True, has_t=True):
     dir_str = './Data/' + dataset
     train_data = np.load(dir_str+'/train.npy', allow_pickle=True)
-    # val_data = np.load(dir_str+'/val_full.npy', allow_pickle=True)
-    # val_warm_data = np.load(dir_str+'/val_warm.npy', allow_pickle=True)
+    
     val_cold_data = np.load(dir_str+'/val_cold.npy', allow_pickle=True)
-    # test_data = np.load(dir_str+'/test_full.npy', allow_pickle=True)
-    # test_warm_data = np.load(dir_str+'/test_warm.npy', allow_pickle=True)
+    
     test_cold_data = np.load(dir_str+'/test_cold.npy', allow_pickle=True)
 
     train_data = np.array(train_data, dtype=np.int32)
-    # val_cold_data = np.array(val_cold_data, dtype=np.int32)
-    # test_cold_data = np.array(test_cold_data, dtype=np.int32)
+
+    if args.data_path == 'movielens':
+        test_data = np.load(dir_str+'/test_full.npy', allow_pickle=True)
+        test_warm_data = np.load(dir_str+'/test_warm.npy', allow_pickle=True)
+        val_data = np.load(dir_str+'/val_full.npy', allow_pickle=True)
+        val_warm_data = np.load(dir_str+'/val_warm.npy', allow_pickle=True)
+        val_cold_data = np.array(val_cold_data, dtype=np.int32)
+        test_cold_data = np.array(test_cold_data, dtype=np.int32)
     
     if dataset == 'movielens':
         num_user = 55485
@@ -114,8 +118,10 @@ def data_load(exp_mode, dataset, has_v=True, has_a=True, has_t=True):
         t_feat = torch.tensor(t_feat, dtype=torch.float).cuda()
         # not exist audio feature 
         a_feat = None 
-
-    return num_user, num_item, num_warm_item, train_data, val_cold_data, test_cold_data, v_feat, a_feat, t_feat
+    if args.data_path == 'movielens':
+        return num_user, num_item, num_warm_item, train_data, val_data, val_warm_data, val_cold_data, test_data, test_warm_data, test_cold_data, v_feat, a_feat, t_feat
+    else:
+        return num_user, num_item, num_warm_item, train_data, val_cold_data, test_cold_data, v_feat, a_feat, t_feat
 
 class TrainingDataset(Dataset):
     def __init__(self, num_user, num_item, user_item_dict, dataset, train_data, num_neg):

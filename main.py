@@ -89,7 +89,10 @@ if __name__ == '__main__':
     ##########################################################################################################################################
     print('Data loading ...')
 
-    num_user, num_item, num_warm_item, train_data, val_cold_data, test_cold_data, v_feat, a_feat, t_feat = data_load(args.exp_mode, data_path)
+    if args.data_path == 'movielens':
+        num_user, num_item, num_warm_item, train_data, val_data, val_warm_data, val_cold_data, test_data, test_warm_data, test_cold_data, v_feat, a_feat, t_feat = data_load(args, args.exp_mode, data_path)
+    else:
+        num_user, num_item, num_warm_item, train_data, val_cold_data, test_cold_data, v_feat, a_feat, t_feat = data_load(args, args.exp_mode, data_path)
     
     dir_str = './Data/' + data_path
     if args.data_path == 'movielens':
@@ -98,10 +101,12 @@ if __name__ == '__main__':
         user_item_all_dict = np.load(dir_str+'/user_item_all_dict.npy', allow_pickle=True).item()
     user_item_train_dict = np.load(dir_str+'/user_item_train_dict.npy', allow_pickle=True).item()
 
-    # warm_item = torch.tensor(np.load(dir_str + '/warm_set.npy'))
-    # cold_item = torch.tensor(np.load(dir_str + '/cold_set.npy'))
-    warm_item = None 
-
+    if args.data_path == 'movielens':
+        warm_item = torch.tensor(np.load(dir_str + '/warm_set.npy'))
+        cold_item = torch.tensor(np.load(dir_str + '/cold_set.npy'))
+    else:
+        warm_item = None 
+    
     train_dataset = TrainingDataset(num_user, num_item, user_item_all_dict, data_path, train_data, num_neg)
     
     train_dataloader = DataLoader(train_dataset, batch_size, shuffle=True, num_workers=num_workers)
@@ -129,17 +134,19 @@ if __name__ == '__main__':
         torch.cuda.empty_cache()
 
         train_precision, train_recall, train_ndcg = full_ranking(epoch, model, user_item_train_dict, user_item_train_dict, warm_item, True, step, topK, 'Train', writer)
-        # val_result = full_ranking(epoch,  model, val_data, user_item_train_dict, None, False, step, topK, 'Val/', writer)
-        
-        # val_result_warm = full_ranking(epoch,  model, val_warm_data, user_item_train_dict, cold_item, False, step, topK, 'Val/warm_', writer)
         
         val_result_cold = full_ranking(epoch,  model, val_cold_data, user_item_train_dict, warm_item, False, step, topK, 'Val/cold_', writer)
         
-        # test_result = full_ranking(epoch, model, test_data, user_item_train_dict, None, False, step, topK, 'Test/', writer)
-        
-        # test_result_warm = full_ranking(epoch, model, test_warm_data, user_item_train_dict, cold_item, False, step, topK, 'Test/warm_', writer)
-        
         test_result_cold = full_ranking(epoch, model, test_cold_data, user_item_train_dict, warm_item, False, step, topK, 'Test/cold_', writer)
+
+        if args.data_path == 'movielens':
+            test_result = full_ranking(epoch, model, test_data, user_item_train_dict, None, False, step, topK, 'Test/', writer)
+        
+            test_result_warm = full_ranking(epoch, model, test_warm_data, user_item_train_dict, cold_item, False, step, topK, 'Test/warm_', writer)
+
+            val_result = full_ranking(epoch,  model, val_data, user_item_train_dict, None, False, step, topK, 'Val/', writer)
+        
+            val_result_warm = full_ranking(epoch,  model, val_warm_data, user_item_train_dict, cold_item, False, step, topK, 'Val/warm_', writer)
 
 
         if val_result_cold[1] > max_recall:
