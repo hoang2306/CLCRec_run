@@ -128,7 +128,7 @@ if __name__ == '__main__':
             break
         torch.cuda.empty_cache()
 
-        train_precision, train_recall, train_ndcg = full_ranking(epoch, model, user_item_train_dict, user_item_train_dict, True, warm_item, step, topK, 'Train', writer)
+        train_precision, train_recall, train_ndcg = full_ranking(epoch, model, user_item_train_dict, user_item_train_dict, warm_item, True, step, topK, 'Train', writer)
         # val_result = full_ranking(epoch,  model, val_data, user_item_train_dict, None, False, step, topK, 'Val/', writer)
         
         # val_result_warm = full_ranking(epoch,  model, val_warm_data, user_item_train_dict, cold_item, False, step, topK, 'Val/warm_', writer)
