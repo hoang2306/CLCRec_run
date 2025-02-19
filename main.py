@@ -105,7 +105,9 @@ if __name__ == '__main__':
         warm_item = torch.tensor(np.load(dir_str + '/warm_set.npy'))
         cold_item = torch.tensor(np.load(dir_str + '/cold_set.npy'))
     else:
-        warm_item = None 
+        # warm_item = None 
+        warm_item = torch.tensor(np.load(dir_str + '/warm_set.npy'))
+        cold_item = torch.tensor(np.load(dir_str + '/cold_set.npy'))
     
     train_dataset = TrainingDataset(num_user, num_item, user_item_all_dict, data_path, train_data, num_neg)
     
