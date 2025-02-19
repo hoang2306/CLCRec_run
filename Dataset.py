@@ -74,7 +74,7 @@ def data_load(args, exp_mode, dataset, has_v=True, has_a=True, has_t=True):
         a_feat = t_feat = None
     else:
         if dataset == 'baby':
-            num_user = 19445
+            num_user = 19459
             num_item = 7050
             num_warm_item = 5640
         # add more 
@@ -102,6 +102,7 @@ def data_load(args, exp_mode, dataset, has_v=True, has_a=True, has_t=True):
             t_feat = os.path.join(dir_str, 'text_feat.npy')
             a_feat = os.path.join(dir_str, 'audio_feat.npy')
         elif exp_mode == 'fm':
+            print('load multimedia ok')
             v_feat = os.path.join(dir_str, 'image_feat_missing_test.npy')
             t_feat = os.path.join(dir_str, 'text_feat_missing_test.npy')
             a_feat = os.path.join(dir_str, 'audio_feat_missing_test.npy')
