@@ -77,6 +77,11 @@ def data_load(args, exp_mode, dataset, has_v=True, has_a=True, has_t=True):
             num_user = 19445
             num_item = 7050
             num_warm_item = 5640
+        elif dataset == 'sports':
+            num_user = 35598
+            num_item = 18287
+            num_warm_item = 14630
+
         # add more 
 
         # multimedia load 
