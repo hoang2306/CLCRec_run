@@ -12,7 +12,7 @@ def full_ranking(epoch, model, data, user_item_inter, mask_items, is_training, s
         all_index_of_rank_list = rank(model.num_user, user_item_inter, mask_items, model.result, is_training, step, topk)
         precision, recall, ndcg_score = full_accuracy(data, all_index_of_rank_list, user_item_inter, is_training, topk)
 
-        print('---------------------------------{0}-th Precition:{1:.4f} TopK:{0} - Recall:{2:.4f} NDCG:{3:.4f}---------------------------------'.format(
+        print('---------------------------------{0}-th Precition:{1:.4f} TopK:{2} - Recall:{3:.4f} NDCG:{4:.4f}---------------------------------'.format(
             epoch, precision, topk, recall, ndcg_score))
         # if writer is not None:
         #     writer.add_scalar(prefix+'_Precition', precision, epoch)
