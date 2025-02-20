@@ -137,9 +137,11 @@ if __name__ == '__main__':
 
         train_precision, train_recall, train_ndcg = full_ranking(epoch, model, user_item_train_dict, user_item_train_dict, warm_item, True, step, topK, 'Train', writer)
         
-        val_result_cold = full_ranking(epoch,  model, val_cold_data, user_item_train_dict, warm_item, False, step, topK, 'Val/cold_', writer)
+        val_result_cold = full_ranking(epoch,  model, val_cold_data, user_item_train_dict, warm_item, False, step, 10, 'Val/cold_', writer)
+        val_result_cold_20 = full_ranking(epoch,  model, val_cold_data, user_item_train_dict, warm_item, False, step, 20, 'Val/cold_', writer)
         
-        test_result_cold = full_ranking(epoch, model, test_cold_data, user_item_train_dict, warm_item, False, step, topK, 'Test/cold_', writer)
+        test_result_cold = full_ranking(epoch, model, test_cold_data, user_item_train_dict, warm_item, False, step, 10, 'Test/cold_', writer)
+        test_result_cold_20 = full_ranking(epoch, model, test_cold_data, user_item_train_dict, warm_item, False, step, 20, 'Test/cold_', writer)
 
         if args.data_path == 'movielens':
             test_result = full_ranking(epoch, model, test_data, user_item_train_dict, None, False, step, topK, 'Test/', writer)
@@ -149,7 +151,7 @@ if __name__ == '__main__':
             val_result = full_ranking(epoch,  model, val_data, user_item_train_dict, None, False, step, topK, 'Val/', writer)
         
             val_result_warm = full_ranking(epoch,  model, val_warm_data, user_item_train_dict, cold_item, False, step, topK, 'Val/warm_', writer)
-
+        
 
         if val_result_cold[1] > max_recall:
             pre_id_embedding = model.id_embedding
