@@ -79,8 +79,13 @@ def data_load(args, exp_mode, dataset, has_v=True, has_a=True, has_t=True):
             num_warm_item = 5640
         elif dataset == 'sports':
             num_user = 35598
-            num_item = 18287
+            num_item = 18287 # check 
             num_warm_item = 14630
+        elif dataset == 'clothing':
+            # setting theo notebook 
+            num_user = 39387
+            num_item = 22498
+            num_warm_item = 17999
 
         # add more 
 
